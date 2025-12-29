@@ -1,38 +1,54 @@
-import { useQuery } from "@tanstack/react-query";
-import {
-  fetchProducts,
-  fetchCategories,
-  fetchProductsByCategory,
-} from "../api/fakestore";
+import { useEffect, useState } from "react";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../firebase";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../features/cart/cartSlice";
-import { useState } from "react";
 
 function Home() {
   const dispatch = useDispatch();
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [loading, setLoading] = useState(true);
 
-  // Fetch all categories
-  const { data: categories } = useQuery({
-    queryKey: ["categories"],
-    queryFn: fetchCategories,
-  });
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        let q;
 
-  // Fetch all products OR category products
-  const {
-    data: products,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["products", selectedCategory],
-    queryFn: () =>
-      selectedCategory
-        ? fetchProductsByCategory(selectedCategory)
-        : fetchProducts(),
-  });
+        if (selectedCategory) {
+          q = query(
+            collection(db, "products"),
+            where("category", "==", selectedCategory)
+          );
+        } else {
+          q = collection(db, "products");
+        }
 
-  if (isLoading) return <p>Loading products...</p>;
-  if (error) return <p>Error loading products</p>;
+        const snapshot = await getDocs(q);
+        const productsData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        setProducts(productsData);
+
+        // Build categories list from products
+        const uniqueCategories = [
+          ...new Set(productsData.map((p) => p.category)),
+        ];
+        setCategories(uniqueCategories);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, [selectedCategory]);
+
+  if (loading) return <p>Loading products...</p>;
 
   return (
     <div>
@@ -44,7 +60,7 @@ function Home() {
         onChange={(e) => setSelectedCategory(e.target.value)}
       >
         <option value="">All Categories</option>
-        {categories?.map((category) => (
+        {categories.map((category) => (
           <option key={category} value={category}>
             {category}
           </option>
@@ -74,9 +90,6 @@ function Home() {
               <strong>Price:</strong> ${product.price}
             </p>
             <p>{product.description}</p>
-            <p>
-              <strong>Rating:</strong> {product.rating?.rate}
-            </p>
 
             <button onClick={() => dispatch(addToCart(product))}>
               Add to Cart

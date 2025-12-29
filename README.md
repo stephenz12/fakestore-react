@@ -1,45 +1,65 @@
-# FakeStore E-commerce App
+# 🛒 Firebase React E-Commerce App
 
-## Overview
-
-This is an advanced React-based e-commerce application built using the FakeStoreAPI.  
-The application demonstrates asynchronous data fetching, global state management, and cart persistence.
-
-Users can browse products, filter by category, add items to a shopping cart, and simulate a checkout experience.
+This project is a React-based e-commerce application that integrates **Firebase Authentication** and **Firestore** for managing users, products, and orders.  
+It replaces the FakeStore API with Firebase as the backend.
 
 ---
 
-## Features
+## 🚀 Features
 
-- Fetches products dynamically using React Query
-- Category-based product filtering
-- Add and remove products from a shopping cart
-- Cart state managed with Redux Toolkit
-- Cart persistence using sessionStorage
-- Dynamic total item count and price calculation
-- Simulated checkout functionality
-- Image fallback handling for broken product images
+### 🔐 Authentication (Firebase Auth)
+
+- User **registration** with email & password
+- User **login** and **logout**
+- Authentication state tracking (logged in / logged out)
+
+### 👤 User Management (Firestore)
+
+- User profiles stored in Firestore (`users` collection)
+- Each user is linked to their Firebase Auth UID
+
+### 🛍️ Product Management (Firestore)
+
+- Products are stored in Firestore (`products` collection)
+- Home page fetches products from Firestore
+- Category filtering
+- Add products to cart
+
+### 🛒 Cart & Orders (Firestore)
+
+- Cart managed with Redux
+- Place orders from cart
+- Orders stored in Firestore (`orders` collection)
+- Each order includes:
+  - User ID
+  - Products
+  - Total price
+  - Timestamp
+
+### 📦 Order History
+
+- Logged-in users can view their past orders
+- Orders are filtered by the current user
+- Displays order details and items
 
 ---
 
-## Technologies Used
+## 🧱 Tech Stack
 
-- React
-- Vite
-- React Query
-- Redux Toolkit
-- React Router
-- FakeStoreAPI
+- **React**
+- **React Router**
+- **Redux Toolkit**
+- **Firebase Authentication**
+- **Firebase Firestore**
+- **Vite**
 
 ---
 
-## Getting Started
+## ⚙️ Setup Instructions
 
-### Installation
+### 1️⃣ Clone the repository
 
 ```bash
-git clone https://github.com/stephenz12/fakestore-react.git
-cd fakestore-react
-npm install
-npm run dev
+git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+cd YOUR_REPO_NAME
 ```
