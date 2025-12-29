@@ -63,3 +63,26 @@ It replaces the FakeStore API with Firebase as the backend.
 git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
 cd YOUR_REPO_NAME
 ```
+
+## 🚀 Live Demo
+
+https://YOUR-VERCEL-APP.vercel.app
+
+## 🧪 Testing
+
+This project includes:
+
+- Unit tests using Vitest and React Testing Library
+- An integration test that validates the Add-to-Cart user flow
+- Tests are run automatically in the CI pipeline
+
+## 🔁 CI/CD Pipeline
+
+A GitHub Actions CI/CD pipeline is configured to:
+
+- Run tests and build the app on every push to the main branch
+- Automatically deploy the application to Vercel after all tests pass
+
+## 📦 Repository
+
+https://github.com/YOUR_USERNAME/fakestore-react
